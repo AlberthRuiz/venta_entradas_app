@@ -61,7 +61,7 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
 
     val context = LocalContext.current
 
-    val viewMode: VentaViewModel = remember { VentaViewModel() }
+    val viewModel: VentaViewModel = remember { VentaViewModel() }
 
     var expanded by remember { mutableStateOf(false) }
     var seleccion by remember { mutableStateOf("") }
@@ -109,6 +109,7 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
                     },
                     onValueChange = {
                         seleccion = it.toString()
+                        viewModel.onChangeNombre(seleccion)
 
                     },
                     trailingIcon = {
