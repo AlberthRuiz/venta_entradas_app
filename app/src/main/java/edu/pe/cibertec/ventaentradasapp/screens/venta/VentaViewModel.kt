@@ -11,6 +11,4 @@ class VentaViewModel {
         _pelicula_seleccionada.value = _pelicula_seleccionada.value.copy(precio =precio)
     }
 
-
-
 }
