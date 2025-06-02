@@ -33,12 +33,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 enum class pelicula (
     val titulo: String,
@@ -53,11 +55,13 @@ enum class pelicula (
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(
-    showBackground = true
-)
+
 @Composable
-fun ScreenVenta(modifier: Modifier = Modifier){
+fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
+
+    val context = LocalContext.current
+
+    val viewMode: VentaViewModel = remember { VentaViewModel() }
 
     var expanded by remember { mutableStateOf(false) }
     var seleccion by remember { mutableStateOf("") }
@@ -105,6 +109,7 @@ fun ScreenVenta(modifier: Modifier = Modifier){
                     },
                     onValueChange = {
                         seleccion = it.toString()
+
                     },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon( expanded =  expanded)
