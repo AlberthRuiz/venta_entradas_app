@@ -42,6 +42,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 enum class pelicula (
     val titulo: String,
@@ -271,8 +273,30 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
             Button(
                 modifier = Modifier.width(250.dp).align(androidx.compose.ui.Alignment.CenterHorizontally),
                 onClick = {
+                    val p = viewModel.pelicula_seleccionada.value
+                    val nombre = p.nombre
+                    val precio = p.precio
+                    val sala = p.sala
+                    val cantidad = p.cantidad
+                    val incremento = p.incremento
+                    val descuento = p.descuento
+                    val precio_total = p.precio_total
+                    val img_url = p.img_url
+                    val encodeSala = URLEncoder.encode(sala, StandardCharsets.UTF_8.name())
 
+                    val encodeURL = URLEncoder.encode(img_url, StandardCharsets.UTF_8.name())
 
+                    navController.navigate(
+                        "ticket?" +
+                                "nombre=$nombre&" +
+                                "precio=$precio&" +
+                                "sala=$encodeSala&" +
+                                "cantidad=$cantidad&" +
+                                "incremento=$incremento&" +
+                                "descuento=$descuento&" +
+                                "precio_total=$precio_total&" +
+                                "img_url=$encodeURL",
+                    )
                 },
             ) {
                 Text("Imprimir")

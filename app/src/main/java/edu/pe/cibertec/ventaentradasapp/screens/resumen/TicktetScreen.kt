@@ -1,5 +1,6 @@
 package edu.pe.cibertec.ventaentradasapp.screens.resumen
 
+import android.os.Bundle
 import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +30,15 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 
 @Composable
-fun TicketScreen (modifier: Modifier, navController: NavController? = null){
+fun TicketScreen (modifier: Modifier, arguments: Bundle?){
+    val nombre = arguments?.getString("nombre") ?: "XXXXXXX"
+    val precio = arguments?.getString("precio") ?: 0.0
+    val sala = arguments?.getString("sala") ?: "YYYYYY"
+    val cantidad = arguments?.getString("cantidad") ?: 0
+    val incremento = arguments?.getString("incremento") ?: 0.0
+    val descuento = arguments?.getString("descuento") ?: 0.0
+    val precio_total = arguments?.getString("precio_total") ?: 0.0
+    val img_url = arguments?.getString("img_url") ?: ""
 
 
 
@@ -72,7 +81,7 @@ fun TicketScreen (modifier: Modifier, navController: NavController? = null){
                     color = Color.Black
                 )
                 Text(
-                    "NOMBRE DE LA PELICULA",
+                    nombre,
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
@@ -91,7 +100,7 @@ fun TicketScreen (modifier: Modifier, navController: NavController? = null){
                     color = Color.Black
                 )
                 Text(
-                    "0.0",
+                    cantidad.toString(),
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
@@ -110,7 +119,7 @@ fun TicketScreen (modifier: Modifier, navController: NavController? = null){
                     color = Color.Black
                 )
                 Text(
-                    "0.0",
+                    precio.toString(),
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
@@ -129,7 +138,7 @@ fun TicketScreen (modifier: Modifier, navController: NavController? = null){
                     color = Color.Black
                 )
                 Text(
-                    "0.0",
+                    incremento.toString(),
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
@@ -148,7 +157,7 @@ fun TicketScreen (modifier: Modifier, navController: NavController? = null){
                     color = Color.Black
                 )
                 Text(
-                    "0.0",
+                    descuento.toString(),
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
@@ -167,7 +176,7 @@ fun TicketScreen (modifier: Modifier, navController: NavController? = null){
                     color = Color.Black
                 )
                 Text(
-                    "0.0",
+                    precio_total.toString(),
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
@@ -177,7 +186,7 @@ fun TicketScreen (modifier: Modifier, navController: NavController? = null){
         }
         Spacer(modifier= Modifier.height(10.dp))
         AsyncImage(
-            model = "https://www.revistaclinicacontemporanea.org/imagenes/Blade_Runner.jpg",
+            model = img_url,
             contentDescription = "poster de pelicula",
             modifier = Modifier.width(200.dp). height(280.dp).clip(RoundedCornerShape(8.dp)),
             contentScale = ContentScale.Crop,
