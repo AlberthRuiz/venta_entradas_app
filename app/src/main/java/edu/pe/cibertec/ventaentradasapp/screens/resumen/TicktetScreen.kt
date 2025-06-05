@@ -1,5 +1,7 @@
 package edu.pe.cibertec.ventaentradasapp.screens.resumen
 
+import android.widget.Space
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,12 +25,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 
 @Composable
-fun TicketScreen (modifier: Modifier){
-    Column (modifier= Modifier.fillMaxSize().
-        padding(15.dp).
+fun TicketScreen (modifier: Modifier, navController: NavController? = null){
+
+
+
+    Column (
+        modifier= Modifier.fillMaxSize().
+        background(Color(0xFFF5F5F5)).
+        padding(20.dp).
         verticalScroll(
             rememberScrollState()
         ),
@@ -39,22 +47,29 @@ fun TicketScreen (modifier: Modifier){
             text = "TICKET ENTRADA",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
+            color =  Color(0xFF6B46C1),
             modifier= Modifier.padding(bottom = 20.dp)
         )
 
         Column (
-            modifier = Modifier.fillMaxWidth().
-            padding(vertical = 5.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White, RoundedCornerShape(20.dp))
+                .padding(horizontal = 20.dp)
+
         )
         {
-            Row ( modifier = Modifier.fillMaxWidth().
-            padding(vertical = 5.dp),
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
                 horizontalArrangement =  Arrangement.SpaceBetween
             ) {
                 Text(
                     "Pelicula: ",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
                 Text(
                     "NOMBRE DE LA PELICULA",
@@ -62,51 +77,102 @@ fun TicketScreen (modifier: Modifier){
                     color = Color.Gray
                 )
             }
-            Row ( modifier = Modifier.fillMaxWidth().
-            padding(vertical = 5.dp),
+            Spacer(Modifier.height(5.dp))
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
                 horizontalArrangement =  Arrangement.SpaceBetween
             ) {
                 Text(
-                    "Pelicula: ",
+                    "Cantidad: ",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
                 Text(
-                    "NOMBRE DE LA PELICULA",
+                    "0.0",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
             }
-            Row ( modifier = Modifier.fillMaxWidth().
-            padding(vertical = 5.dp),
+            Spacer(Modifier.height(5.dp))
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
                 horizontalArrangement =  Arrangement.SpaceBetween
             ) {
                 Text(
-                    "Pelicula: ",
+                    "Subtotal: ",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
                 Text(
-                    "NOMBRE DE LA PELICULA",
+                    "0.0",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
             }
-            Row ( modifier = Modifier.fillMaxWidth().
-            padding(vertical = 5.dp),
+            Spacer(Modifier.height(5.dp))
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
                 horizontalArrangement =  Arrangement.SpaceBetween
             ) {
                 Text(
-                    "Pelicula: ",
+                    "Incremento: ",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
                 Text(
-                    "NOMBRE DE LA PELICULA",
+                    "0.0",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
             }
+            Spacer(Modifier.height(5.dp))
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                horizontalArrangement =  Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Descuento: ",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Text(
+                    "0.0",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+            }
+            Spacer(Modifier.height(5.dp))
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                horizontalArrangement =  Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Total: ",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Text(
+                    "0.0",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+            }
+            Spacer(Modifier.height(5.dp))
 
         }
         Spacer(modifier= Modifier.height(10.dp))
