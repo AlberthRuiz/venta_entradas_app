@@ -19,15 +19,7 @@ fun Navigation(modifier: Modifier, navHostController: NavHostController){
             VentaScreen(modifier, navHostController)
         }
         composable(
-           route =  "ticket?" +
-                   "nombre={nombre}&" +
-                   "precio={precio}&" +
-                   "sala={sala}&" +
-                   "cantidad={cantidad}&" +
-                   "incremento={incremento}&" +
-                   "descuento={descuento}&" +
-                   "precio_total={precio_total}&" +
-                   "img_url={img_url}",
+           route =  "ticket?nombre={nombre}&precio={precio}&sala={sala}&cantidad={cantidad}&incremento={incremento}&descuento={descuento}&precio_total={precio_total}&img_url={img_url}",
             arguments = listOf(
                 navArgument ("nombre") { type = NavType.StringType },
                 navArgument ("precio") { type = NavType.FloatType },

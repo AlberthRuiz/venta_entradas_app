@@ -236,6 +236,7 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
                     viewModel.onChangeIncremento(incremento)
                     viewModel.onChangeDescuento(descto)
                     viewModel.onChangePrecioTotal(total)
+                    viewModel.onChangeNombre(seleccion)
 
                 },
             ) {

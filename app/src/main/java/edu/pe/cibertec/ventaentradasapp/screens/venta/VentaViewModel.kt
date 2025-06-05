@@ -20,7 +20,7 @@ class VentaViewModel {
         _pelicula_seleccionada.value = _pelicula_seleccionada.value.copy(sala = sala)
     }
     fun onChangeIncremento(incremento: Double){
-        _pelicula_seleccionada.value = _pelicula_seleccionada.value.copy(incremento =incremento)
+        _pelicula_seleccionada.value = _pelicula_seleccionada.value.copy(incremento = incremento)
     }
     fun onChangeDescuento(descuento: Double){
         _pelicula_seleccionada.value = _pelicula_seleccionada.value.copy(descuento =descuento)

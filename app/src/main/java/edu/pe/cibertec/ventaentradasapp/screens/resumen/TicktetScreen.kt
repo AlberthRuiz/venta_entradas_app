@@ -32,12 +32,12 @@ import coil.compose.AsyncImage
 @Composable
 fun TicketScreen (modifier: Modifier, arguments: Bundle?){
     val nombre = arguments?.getString("nombre") ?: "XXXXXXX"
-    val precio = arguments?.getString("precio") ?: 0.0
+    val precio = arguments?.getDouble("precio") ?: 0.0
     val sala = arguments?.getString("sala") ?: "YYYYYY"
-    val cantidad = arguments?.getString("cantidad") ?: 0
-    val incremento = arguments?.getString("incremento") ?: 0.0
-    val descuento = arguments?.getString("descuento") ?: 0.0
-    val precio_total = arguments?.getString("precio_total") ?: 0.0
+    val cantidad = arguments?.getInt("cantidad") ?: 0
+    val incremento = arguments?.getDouble("incremento") ?: 0.0
+    val descuento = arguments?.getDouble("descuento") ?: 0.0
+    val precio_total = arguments?.getDouble("precio_total") ?: 0.0
     val img_url = arguments?.getString("img_url") ?: ""
 
 
