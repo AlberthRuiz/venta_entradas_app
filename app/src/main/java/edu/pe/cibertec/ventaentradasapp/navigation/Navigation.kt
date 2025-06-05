@@ -10,7 +10,7 @@ import edu.pe.cibertec.ventaentradasapp.screens.venta.VentaScreen
 
 @Composable
 fun Navigation(modifier: Modifier, navHostController: NavHostController){
-    NavHost(navController =  navHostController, startDestination = "venta")
+    NavHost(navController =  navHostController, startDestination = "ticket")
     {
         composable("venta") {
             VentaScreen(modifier, navHostController)

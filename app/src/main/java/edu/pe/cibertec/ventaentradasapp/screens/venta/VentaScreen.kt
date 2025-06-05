@@ -2,6 +2,7 @@ package edu.pe.cibertec.ventaentradasapp.screens.venta
 
 import android.text.Layout.Alignment
 import android.widget.Space
+import android.widget.Toast
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -132,6 +133,7 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
                             },
                             onClick = {
                                 seleccion = "${m.titulo}"
+                                viewModel.onChanegeUrlImagen(m.imagenUrl)
                                 expanded = false
                             },
                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
@@ -150,6 +152,7 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
                         selected =  (option == selectedOption),
                         onClick = {
                             selectedOption = option
+                            viewModel.onChangeSala(option)
                         }
                     )
                     Text(option)
@@ -168,6 +171,7 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
                     value = cant.toString(),
                     onValueChange = {
                         cant = if (it.isNotEmpty()) it.toInt() else 0
+                        viewModel.onChangeCantidad(cant)
                     },
                     label = {
                         Text("N°",
@@ -183,6 +187,53 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
             Button(
                 modifier = Modifier.width(250.dp).align(androidx.compose.ui.Alignment.CenterHorizontally),
                 onClick = {
+                    if (viewModel.pelicula_seleccionada.value.cantidad==0){
+                        Toast.makeText(
+                            context,
+                            "Cantdad no puede ser 0",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@Button
+                    }
+
+                    val peliculaActual = pelicula.values().find { it.titulo == seleccion }
+
+                    if(peliculaActual!= null){
+                        viewModel.onChangePrecio(peliculaActual.precio)
+                    }else{
+                        Toast.makeText(
+                            context,
+                            "Pelicula no seleccionada",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    val subTotal =
+                        viewModel.pelicula_seleccionada.value.precio *  viewModel.pelicula_seleccionada.value.cantidad
+
+                    val proc_incremento = when (viewModel.pelicula_seleccionada.value.sala){
+                        "Sala 1 - IMAX (20%)" -> 0.20
+                        "Sala 2 - Dolby Atmos (15%)" -> 0.15
+                        "Sala 3 - Space X (10%)" -> 0.10
+                        else ->  0.0
+                    }
+                    val incremento = subTotal * proc_incremento
+
+                    val porc_descto = when
+                    {
+                        viewModel.pelicula_seleccionada.value.cantidad>=7 -> 0.15
+                        viewModel.pelicula_seleccionada.value.cantidad>=5 -> 0.10
+                        viewModel.pelicula_seleccionada.value.cantidad>=10 -> 0.25
+                        else -> 0.0
+                    }
+
+                    val descto = subTotal * porc_descto
+
+                    val total = subTotal + incremento + descto
+
+                    viewModel.onChangeIncremento(incremento)
+                    viewModel.onChangeDescuento(descto)
+                    viewModel.onChangePrecioTotal(total)
 
                 },
             ) {
@@ -209,10 +260,10 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                 )
                 {
-                    Text("0.0")
-                    Text("0.0%")
-                    Text("0.0")
-                    Text("0.0")
+                    Text("${viewModel.pelicula_seleccionada.value.precio}")
+                    Text("${viewModel.pelicula_seleccionada.value.incremento}")
+                    Text("${viewModel.pelicula_seleccionada.value.descuento}")
+                    Text("${viewModel.pelicula_seleccionada.value.precio_total}")
 
                 }
             }
@@ -220,6 +271,7 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
             Button(
                 modifier = Modifier.width(250.dp).align(androidx.compose.ui.Alignment.CenterHorizontally),
                 onClick = {
+
 
                 },
             ) {
