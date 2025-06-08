@@ -1,5 +1,7 @@
 package edu.pe.cibertec.ventaentradasapp.screens.venta
 
+
+
 data class StatePelicula(
     var nombre:String,
     var precio:Double,

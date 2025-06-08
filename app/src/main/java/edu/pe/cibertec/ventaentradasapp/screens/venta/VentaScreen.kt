@@ -1,6 +1,7 @@
 package edu.pe.cibertec.ventaentradasapp.screens.venta
 
 import android.text.Layout.Alignment
+import android.util.Log
 import android.widget.Space
 import android.widget.Toast
 import androidx.compose.foundation.horizontalScroll
@@ -44,6 +45,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import kotlin.compareTo
+import kotlin.times
 
 enum class pelicula (
     val titulo: String,
@@ -53,8 +56,12 @@ enum class pelicula (
     Alien("Alien Romulus", 30.00, "https://m.media-amazon.com/images/I/91R9N-YuPcL._SX342_.jpg"),
     DeadPoolAndWolverine("Deadpool y Wolverine", 25.00, "https://en.wikipedia.org/wiki/File:Deadpool_%26_Wolverine_poster.jpg"),
     Beetlejuice("Beetlejuice", 20.00, "https://en.wikipedia.org/wiki/File:Beetlejuice_Beetlejuice_poster.jpg"),
-    BladeRunner2049("Blade Runner 2049", 14.50,"https://www.revistaclinicacontemporanea.org/imagenes/Blade_Runner.jpg")
+    BladeRunner2049("Blade Runner 2049", 14.50,"https://www.revistaclinicacontemporanea.org/imagenes/Blade_Runner.jpg"),
+    Constantine("Constantine", 17.10,"https://resizing.flixster.com/mOxGhpYzFmKNsSc6ucumX_RBDVQ=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p35545_p_v8_al.jpg"),
+
 }
+
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,7 +142,7 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
                             },
                             onClick = {
                                 seleccion = "${m.titulo}"
-                                viewModel.onChanegeUrlImagen(m.imagenUrl)
+                                viewModel.onChangeUrlImagen(m.imagenUrl)
                                 expanded = false
                             },
                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
@@ -189,54 +196,46 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
             Button(
                 modifier = Modifier.width(250.dp).align(androidx.compose.ui.Alignment.CenterHorizontally),
                 onClick = {
-                    if (viewModel.pelicula_seleccionada.value.cantidad==0){
-                        Toast.makeText(
-                            context,
-                            "Cantdad no puede ser 0",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    if (viewModel.pelicula_seleccionada.value.cantidad == 0) {
+                        Toast.makeText(context, "La cantidad no puede ser 0", Toast.LENGTH_SHORT)
+                            .show()
+                        return@Button
+                    }
+                    val selectedMovie = pelicula.values().find { it.titulo == seleccion }
+                    if (selectedMovie != null) {
+                        viewModel.onChangePrecio(selectedMovie.precio)
+                    } else {
+                        Toast.makeText(context, "Selecciona una pelicula", Toast.LENGTH_SHORT)
+                            .show()
                         return@Button
                     }
 
-                    val peliculaActual = pelicula.values().find { it.titulo == seleccion }
+                    val subtotal =
+                        viewModel.pelicula_seleccionada.value.precio * viewModel.pelicula_seleccionada.value.cantidad
 
-                    if(peliculaActual!= null){
-                        viewModel.onChangePrecio(peliculaActual.precio)
-                    }else{
-                        Toast.makeText(
-                            context,
-                            "Pelicula no seleccionada",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
 
-                    val subTotal =
-                        viewModel.pelicula_seleccionada.value.precio *  viewModel.pelicula_seleccionada.value.cantidad
-
-                    val proc_incremento = when (viewModel.pelicula_seleccionada.value.sala){
+                    val incrementoPorcentaje = when (viewModel.pelicula_seleccionada.value.sala) {
                         "Sala 1 - IMAX (20%)" -> 0.20
                         "Sala 2 - Dolby Atmos (15%)" -> 0.15
-                        "Sala 3 - Space X (10%)" -> 0.10
-                        else ->  0.0
-                    }
-                    val incremento = subTotal * proc_incremento
-
-                    val porc_descto = when
-                    {
-                        viewModel.pelicula_seleccionada.value.cantidad>=7 -> 0.15
-                        viewModel.pelicula_seleccionada.value.cantidad>=5 -> 0.10
-                        viewModel.pelicula_seleccionada.value.cantidad>=10 -> 0.25
+                        "Sala 3 - Screen X (10%)" -> 0.10
                         else -> 0.0
                     }
+                    val incremento = subtotal * incrementoPorcentaje
 
-                    val descto = subTotal * porc_descto
+                    val descuentoPorcentaje = when {
+                        viewModel.pelicula_seleccionada.value.cantidad >= 5 -> 0.15
+                        viewModel.pelicula_seleccionada.value.cantidad >= 3 -> 0.10
+                        else -> 0.0
+                    }
+                    val descuento = subtotal * descuentoPorcentaje
 
-                    val total = subTotal + incremento + descto
 
+                    val total = subtotal + incremento - descuento
+
+                    viewModel.onChangePrecio(subtotal)
                     viewModel.onChangeIncremento(incremento)
-                    viewModel.onChangeDescuento(descto)
+                    viewModel.onChangeDescuento(descuento)
                     viewModel.onChangePrecioTotal(total)
-                    viewModel.onChangeNombre(seleccion)
 
                 },
             ) {
@@ -274,29 +273,20 @@ fun VentaScreen(modifier: Modifier = Modifier, navController: NavController){
             Button(
                 modifier = Modifier.width(250.dp).align(androidx.compose.ui.Alignment.CenterHorizontally),
                 onClick = {
-                    val p = viewModel.pelicula_seleccionada.value
-                    val nombre = p.nombre
-                    val precio = p.precio
-                    val sala = p.sala
-                    val cantidad = p.cantidad
-                    val incremento = p.incremento
-                    val descuento = p.descuento
-                    val precio_total = p.precio_total
-                    val img_url = p.img_url
-                    val encodeSala = URLEncoder.encode(sala, StandardCharsets.UTF_8.name())
-
-                    val encodeURL = URLEncoder.encode(img_url, StandardCharsets.UTF_8.name())
-
+                    val pelicula = viewModel.pelicula_seleccionada.value
+                    val nombre = pelicula.nombre
+                    val precio = pelicula.precio
+                    val sala = pelicula.sala
+                    val cantidad = pelicula.cantidad
+                    val incremento = pelicula.incremento
+                    val descuento = pelicula.descuento
+                    val precioTotal = pelicula.precio_total
+                    val urlImagen = pelicula.img_url
+                    val encodedSala = URLEncoder.encode(sala, StandardCharsets.UTF_8.name())
+                    val encodedUrlImagen =
+                        URLEncoder.encode(urlImagen, StandardCharsets.UTF_8.name())
                     navController.navigate(
-                        "ticket?" +
-                                "nombre=$nombre&" +
-                                "precio=$precio&" +
-                                "sala=$encodeSala&" +
-                                "cantidad=$cantidad&" +
-                                "incremento=$incremento&" +
-                                "descuento=$descuento&" +
-                                "precio_total=$precio_total&" +
-                                "img_url=$encodeURL",
+                        "ticket?nombre=$nombre&precio=$precio&sala=$encodedSala&cantidad=$cantidad&incremento=$incremento&descuento=$descuento&precioTotal=$precioTotal&img_url=$encodedUrlImagen"
                     )
                 },
             ) {

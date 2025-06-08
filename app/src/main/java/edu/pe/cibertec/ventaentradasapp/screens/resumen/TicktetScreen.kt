@@ -28,175 +28,213 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @Composable
-fun TicketScreen (modifier: Modifier, arguments: Bundle?){
-    val nombre = arguments?.getString("nombre") ?: "XXXXXXX"
-    val precio = arguments?.getDouble("precio") ?: 0.0
-    val sala = arguments?.getString("sala") ?: "YYYYYY"
-    val cantidad = arguments?.getInt("cantidad") ?: 0
-    val incremento = arguments?.getDouble("incremento") ?: 0.0
-    val descuento = arguments?.getDouble("descuento") ?: 0.0
-    val precio_total = arguments?.getDouble("precio_total") ?: 0.0
-    val img_url = arguments?.getString("img_url") ?: ""
+fun TicketScreen(
+    modifier: Modifier,
+    nombre: String,
+    precio: Double,
+    sala: String,
+    cantidad: Int,
+    incremento: Double,
+    descuento: Double,
+    precioTotal: Double,
+    imgUrl: String
+) {
 
-
-
-    Column (
-        modifier= Modifier.fillMaxSize().
-        background(Color(0xFFF5F5F5)).
-        padding(20.dp).
-        verticalScroll(
-            rememberScrollState()
-        ),
+    val subtotal = precio * cantidad
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(0xFFF5F5F5))
+            .padding(16.dp)
+            .verticalScroll(
+                rememberScrollState()
+            ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Text(
-            text = "TICKET ENTRADA",
+            text = "RESUMEN DE VENTA",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            color =  Color(0xFF6B46C1),
-            modifier= Modifier.padding(bottom = 20.dp)
+            color = Color(0xFF6B46C1),
+            modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, RoundedCornerShape(20.dp))
-                .padding(horizontal = 20.dp)
+                .background(Color.White, RoundedCornerShape(8.dp))
+                .padding(20.dp)
+        ) {
 
-        )
-        {
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                horizontalArrangement =  Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    "Pelicula: ",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Text(
-                    nombre,
+                    text = "Nombre:",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
-            }
-            Spacer(Modifier.height(5.dp))
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                horizontalArrangement =  Arrangement.SpaceBetween
-            ) {
                 Text(
-                    "Cantidad: ",
+                    text = nombre,
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Text(
-                    cantidad.toString(),
-                    fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color.Black,
+                    fontWeight = FontWeight.Medium
                 )
             }
-            Spacer(Modifier.height(5.dp))
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                horizontalArrangement =  Arrangement.SpaceBetween
-            ) {
-                Text(
-                    "Subtotal: ",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Text(
-                    precio.toString(),
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-            }
-            Spacer(Modifier.height(5.dp))
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                horizontalArrangement =  Arrangement.SpaceBetween
-            ) {
-                Text(
-                    "Incremento: ",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Text(
-                    incremento.toString(),
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-            }
-            Spacer(Modifier.height(5.dp))
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                horizontalArrangement =  Arrangement.SpaceBetween
-            ) {
-                Text(
-                    "Descuento: ",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Text(
-                    descuento.toString(),
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-            }
-            Spacer(Modifier.height(5.dp))
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                horizontalArrangement =  Arrangement.SpaceBetween
-            ) {
-                Text(
-                    "Total: ",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Text(
-                    precio_total.toString(),
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-            }
-            Spacer(Modifier.height(5.dp))
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Sala:",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+                Text(
+                    text = "Sala $sala",
+                    fontSize = 14.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Día:",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+                Text(
+                    text = "${SimpleDateFormat("dd/MM/yyyy").format(Date())}",
+                    fontSize = 14.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = "Cantidad de Entradas: $cantidad",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.Gray
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "SubTotal:",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+                Text(
+                    text = "S/.${String.format("%.2f", precio)}",
+                    fontSize = 14.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Descuento:",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+                Text(
+                    text = "S/.${String.format("%.2f", descuento)}",
+                    fontSize = 14.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Incremento:",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+                Text(
+                    text = "S/.${String.format("%.2f", incremento)}",
+                    fontSize = 14.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Total a Pagar:",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Text(
+                    text = "S/.${String.format("%.2f", precioTotal)}",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
         }
-        Spacer(modifier= Modifier.height(10.dp))
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+
         AsyncImage(
-            model = img_url,
-            contentDescription = "poster de pelicula",
-            modifier = Modifier.width(200.dp). height(280.dp).clip(RoundedCornerShape(8.dp)),
+            model = imgUrl,
+            contentDescription = "Movie Poster",
+            modifier = Modifier
+                .width(200.dp)
+                .height(280.dp)
+                .clip(RoundedCornerShape(8.dp)),
             contentScale = ContentScale.Crop,
-            placeholder = painterResource(id =  android.R.drawable.ic_menu_add),
+            placeholder = painterResource(id = android.R.drawable.ic_menu_gallery),
             error = painterResource(id = android.R.drawable.ic_menu_close_clear_cancel)
         )
-        Spacer(modifier= Modifier.height(10.dp))
+
+        Spacer(modifier = Modifier.height(10.dp))
+
 
     }
-
 
 
 }
